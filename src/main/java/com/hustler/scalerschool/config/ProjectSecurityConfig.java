@@ -36,13 +36,16 @@ public class ProjectSecurityConfig {
          */
 
         //custom config at api  level (it is good approach to use seperate requestMatcher for each api, than directly to one, as if you use that same specific directly in a single requestMatcher() sometimes may cause allowing the random endpoints access)
-        http.csrf().disable().authorizeHttpRequests(auth -> auth
+//        http.csrf().disable().authorizeHttpRequests(auth -> auth
+        http.csrf(csrf->csrf
+                        .ignoringRequestMatchers("/saveMsg") // Ignore CSRF for this endpoint
+                ).authorizeHttpRequests(auth -> auth
                         .requestMatchers("/dashboard").authenticated()
                         .requestMatchers("/","/home").permitAll()
                         .requestMatchers("/holidays/**").permitAll() //   /** says that inside the /holidays all the urls/api are also included init to permit
                         .requestMatchers("/contact").permitAll()
                         .requestMatchers("/saveMsg").permitAll()
-                        .requestMatchers("/courses").authenticated() //made this courses page secured, so any user have to make Authentication to authorize the page.
+                        .requestMatchers("/courses").permitAll()//made this courses page secured, so any user have to make Authentication to authorize the page.
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/assets/**").permitAll()
                 )
@@ -53,7 +56,7 @@ public class ProjectSecurityConfig {
                         .failureUrl("/login?error=true")  // Redirect to login with error on failure
                         .permitAll()   // Allow everyone to access the login page
                 )
-                .logout(logout->logout
+                .logout(logout->logout  //this is the default logout way, which will not triggered as we enabled CSRF.so custom logout url get triggered as we implemented the method for logout in loginController.
                         .logoutSuccessUrl("/login?logout=true")  // Redirect after successful logout
                         .invalidateHttpSession(true)            // Invalidate the session
                         .deleteCookies("JSESSIONID")   // Optional: Delete cookies for a clean logout
