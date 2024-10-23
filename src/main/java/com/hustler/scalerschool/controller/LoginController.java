@@ -1,6 +1,11 @@
 package com.hustler.scalerschool.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,4 +37,26 @@ public class LoginController {
         return "login.html";
 
     }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logoutPage(HttpServletRequest request, HttpServletResponse response){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication(); //getting existing authentication object.
+        if(auth!=null){
+            //use SecurityContextLogoutHandler to log the user out.
+            SecurityContextLogoutHandler logoutHandler=new SecurityContextLogoutHandler();
+            logoutHandler.logout(request,response,auth);//I'm just invoking the logout() method present inside the SecurityContext folder. And to this logout method I'm going to pass this HttpServletRequest() object and the HttpServletResponse() along with the Authentication object, WHEN Authentication object is not null.
+            //in logout() if you see its implementation, it just invalidates the session.
+        }
+        return "redirect:/login?logout=true";  //at last I'm going to redirect the end user /login, obviously the above method(displayLoginPage) will get invoked. And based upon this logout parameter, the end user will see this message, which is you have been successfully logged out.
+    }
 }
+
+
+//There are two approaches to get the current session/existing authentication details.
+//1. The very first one is we can directly inject this authentication object as a method parameter so that
+//my spring security framework will provide all the current Authentication details during the runtime.
+
+//2. The second approach that we can follow is to fetch the current Authentication details with the help
+//of SecurityContextHolder.getContext().getAuthentication(). Because whenever the successful
+//authentication happens during the login operation.
+//Those Authentication details will be saved inside the SecurityContext folder.

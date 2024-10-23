@@ -16,7 +16,7 @@ equals(), hashCode(), toString() methods & Constructor at compile time.
 This makes our code short and clean.
 * */
 @Data //to avoid writing getters and setters.
-public class  Contact {
+public class  Contact extends BaseEntity{
     //maintaining the same attributes names from the html so to match directly with this class attributes.
 
     /*
@@ -26,6 +26,8 @@ public class  Contact {
  * */
 
 //using same variable names that are inside of out html code.
+
+    private int contactId; // primary key
 
     @NotBlank(message="Name must not be blank")  // validation with an error message
     @Size(min=3,message="Name must be atleast 3 characters long")
@@ -47,7 +49,7 @@ public class  Contact {
     @Size(min=10, message="Message must be atleast 10 characters long")
     private String message;
 
-
+    private String status; //fir status of contact message.(open/closed)
 }
 //So automatically spring MVC maps the Attributes in this class(the names of the attributes should be same as varaibles names used in front-end),
 //thereby when client hit  send message button in the form, the form action will trigger  /saveMsg action url in the  front-end and all the data will be
