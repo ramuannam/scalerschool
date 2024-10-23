@@ -54,8 +54,8 @@ public class ContactController { //created new controller for contact as contact
             return "contact.html";//But with the return statement where we are saying contact.html, we are indicating to the spring MVC don't invoke the action again. Instead just display the contact.html along with the errors if there are any available to te frontEnd, fE needs to catch these errors as well.
         }
          contactService.saveMessageDetails(contact); // taking the given object to service layer to do some logic.
-         contactService.setCounter(contactService.getCounter()+1);//jus simply increasing the counter to +1 in contactService.
-         log.info("Number of times the contact for is submitted : "+contactService.getCounter());//logging it.
+//         contactService.setCounter(contactService.getCounter()+1);//jus simply increasing the counter to +1 in contactService.
+//         log.info("Number of times the contact for is submitted : "+contactService.getCounter());//logging it.
         return  "redirect:/contact"; //So whenever we are saying redirect, we are telling to spring MVC, go ahead and invoke the contact action again from the starting.
     }
 }
