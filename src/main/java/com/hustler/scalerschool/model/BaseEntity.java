@@ -13,4 +13,4 @@ public class BaseEntity {
 }
 //So inside this BaseEntity pojo class, I have created all these four fields.
 //The reason is I'm going to need the same four fields in all the model classes that I'm going to create in the future.
-
+// so in future fro any model class we just extend this class to use them, as to avoid again writing the same attributes.

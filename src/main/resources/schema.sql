@@ -1,4 +1,5 @@
 //So this table I'm going to use to save my contact details that my end user is submitting through my contact page inside my web application into this database table.
+
 CREATE TABLE IF NOT EXISTS contact_msg (
                                            contact_id INT AUTO_INCREMENT PRIMARY KEY,
                                            name VARCHAR(100) NOT NULL,

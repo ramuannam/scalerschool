@@ -49,7 +49,7 @@ public class  Contact extends BaseEntity{
     @Size(min=10, message="Message must be atleast 10 characters long")
     private String message;
 
-    private String status; //fir status of contact message.(open/closed)
+    private String status; //for status of contact message.(open/closed)
 }
 //So automatically spring MVC maps the Attributes in this class(the names of the attributes should be same as varaibles names used in front-end),
 //thereby when client hit  send message button in the form, the form action will trigger  /saveMsg action url in the  front-end and all the data will be

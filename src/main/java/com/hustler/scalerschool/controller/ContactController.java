@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -13,10 +14,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
-public class ContactController { //created new controller for contact as contact as some few more details and info to handle like with db etc.. so created separate controller.
+public class ContactController { //created new controller for  contact as some few more details and info to handle like with db etc.. so created separate controller.
 
     private static Logger log= LoggerFactory.getLogger(ContactController.class); //to log/ print the info to the console, we need a log object.
 
@@ -57,5 +61,21 @@ public class ContactController { //created new controller for contact as contact
 //         contactService.setCounter(contactService.getCounter()+1);//jus simply increasing the counter to +1 in contactService.
 //         log.info("Number of times the contact for is submitted : "+contactService.getCounter());//logging it.
         return  "redirect:/contact"; //So whenever we are saying redirect, we are telling to spring MVC, go ahead and invoke the contact action again from the starting.
+    }
+
+    //mvc way for display messgaes at admin dashboard.
+    @RequestMapping("/displayMessages")
+    public ModelAndView displayMessages(Model model){
+        List<Contact> contactMsgs=contactService.findMsgsWithOpenStatus();
+        ModelAndView modelAndView=new ModelAndView("messages.html"); //telling model and view to display messages.html page, when user invokes ths displaymessages method/ endpoint.
+        modelAndView.addObject("contactMsgs",contactMsgs); //adding the list of conatct msgs to model and view object.(to ineract with front end.)
+        return modelAndView;
+
+    }
+
+    @RequestMapping("/closeMsg",method=GET) //accepting a method of GET.
+    public  String closeMsg(@RequestParam int id, Authentication authentication){ //So here I'm catching my query param with the help of request param annotation and the param name is id.I'm also asking my spring security for the authentication object.
+        contactService.updateMsgStatus(id, authentication.getName()); //So now we have to go to the ContactService class and introduce this new method updateMessageStatus().
+        return "redirect:/displayMessages";
     }
 }

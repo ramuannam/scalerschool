@@ -44,12 +44,13 @@ public class ProjectSecurityConfig {
         //custom config at api  level (it is good approach to use seperate requestMatcher for each api, than directly to one, as if you use that same specific directly in a single requestMatcher() sometimes may cause allowing the random endpoints access)
 //        http.csrf().disable().authorizeHttpRequests(auth -> auth
         http.csrf(csrf -> csrf
-                        .ignoringRequestMatchers(new MvcRequestMatcher(introspector,"/saveMsg"))// Ignoring CSRF protection for this /saveMsg endpoint and for h2-console as well
-//                        .ignoringRequestMatchers(new MvcRequestMatcher(introspector,"/courses"))
+                        .ignoringRequestMatchers(new MvcRequestMatcher(introspector,"/saveMsg"))  // Ignoring CSRF protection for this /saveMsg endpoint and for h2-console as well
+//                      .ignoringRequestMatchers(new MvcRequestMatcher(introspector,"/courses"))
                         .ignoringRequestMatchers(PathRequest.toH2Console())  // Ignoring CSRF protection for h2-console as well
                 ).authorizeHttpRequests((auth) -> auth
                         .requestMatchers(new MvcRequestMatcher(introspector,"/courses")).permitAll()
                         .requestMatchers(new MvcRequestMatcher(introspector,"/dashboard")).authenticated()
+                        .requestMatchers(new MvcRequestMatcher(introspector,"/displayMessages")).hasRole("ADMIN") //So whenever we use this hasRole() method. It's an indication to my spring security framework that please secure this page. On top of that, please make sure it should be accessible to the end user who has role with the name  admin only. And like we discussed before, please don't mention ROLE_ prefix here because internally spring security framework is going to append this prefix value for all your roles. but we need to make sure to mention the ROLE_ whenever we are trying to use the thymeleaf tags. Like you can see here, we are trying to use a hasRole() method.
                         .requestMatchers(new MvcRequestMatcher(introspector,"/")).permitAll()
                         .requestMatchers(new MvcRequestMatcher(introspector, "/home")).permitAll()
                         .requestMatchers(new MvcRequestMatcher(introspector,"/holidays/**")).permitAll() //   /** says that inside the /holidays all the urls/api are also included init to permit
@@ -103,7 +104,7 @@ public class ProjectSecurityConfig {
         UserDetails admin=User.builder()
                 .username("admin")
                 .password(encoder.encode("54321"))
-                .roles("USER","ADMIN")
+                .roles("ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(user, admin); //it is a variable constructor here as it can accept any no of users to create a  new user object and stores in the in-memory map.(look into its implementation
     }

@@ -27,5 +27,4 @@ public class GlobalExceptionController {
         errorPage.addObject("errormsg",exception.getMessage());//I'm sending an information to the UI page with an attribute name error message and inside this attribute error message I'm sending, what is the reason that this particular exception being thrown inside my web application.
         return errorPage;
     }
-
 }
