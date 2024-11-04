@@ -20,7 +20,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
-public class ContactController { //created new controller for contact as contact as some few more details and info to handle like with db etc.. so created separate controller.
+public class ContactController { //created new controller for  contact as some few more details and info to handle like with db etc.. so created separate controller.
 
     private static Logger log= LoggerFactory.getLogger(ContactController.class); //to log/ print the info to the console, we need a log object.
 
@@ -78,7 +78,4 @@ public class ContactController { //created new controller for contact as contact
         contactService.updateMsgStatus(id, authentication.getName()); //So now we have to go to the ContactService class and introduce this new method updateMessageStatus().
         return "redirect:/displayMessages";
     }
-
-
-
 }
